@@ -41,12 +41,14 @@ public:
 class PatternDatabase {
     Projection projection;
 
+    
+public:
     /*
       final h-values for abstract-states.
       dead-ends are represented by numeric_limits<int>::max()
     */
     std::vector<int> distances;
-public:
+
     PatternDatabase(
         Projection &&projection,
         std::vector<int> &&distances);
@@ -70,6 +72,10 @@ public:
       this method!
     */
     double compute_mean_finite_h() const;
+
+    const Projection &getProjection() const {
+        return projection;
+    };
 };
 }
 

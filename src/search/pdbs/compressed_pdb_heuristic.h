@@ -1,17 +1,17 @@
 #ifndef COMPRESSED_PDBS_PDB_HEURISTIC_H
 #define COMPRESSED_PDBS_PDB_HEURISTIC_H
 
+#include "compressed_pdb.h"
 #include "pattern_generator.h"
 
 #include "../heuristic.h"
 
 namespace pdbs {
-class PatternDatabase;
+class CompressedPatternDatabase;
 
 // Implements a heuristic for a single PDB.
 class CompressedPDBHeuristic : public Heuristic {
-    std::shared_ptr<PatternDatabase> pdb;
-    //TODO: change to CompressedPDB
+    std::shared_ptr<CompressedPatternDatabase> pdb;
 protected:
     virtual int compute_heuristic(const State &ancestor_state) override;
 public:

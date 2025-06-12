@@ -1,5 +1,6 @@
 #include "compressed_pdb_heuristic.h"
 
+//#include "compressed_pdb.h"
 #include "pattern_database.h"
 
 #include "../plugins/plugin.h"
@@ -11,12 +12,11 @@
 using namespace std;
 
 namespace pdbs {
-static shared_ptr<PatternDatabase> get_pdb_from_generator(
+static shared_ptr<CompressedPatternDatabase> get_pdb_from_generator(
     const shared_ptr<AbstractTask> &task,
     const shared_ptr<PatternGenerator> &pattern_generator) {
     PatternInformation pattern_info = pattern_generator->generate(task);
-    return pattern_info.get_pdb();
-    //TODO: compress pdb
+    return make_shared<CompressedPatternDatabase>(*pattern_info.get_pdb());
 }
 
 CompressedPDBHeuristic::CompressedPDBHeuristic(

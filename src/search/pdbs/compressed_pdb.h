@@ -1,6 +1,7 @@
 #ifndef PDBS_COMPRESSED_PATTERN_DATABASE_H
 #define PDBS_COMPRESSED_PATTERN_DATABASE_H
 
+#include "pattern_database.h"
 #include "types.h"
 
 #include "../task_proxy.h"
@@ -8,49 +9,18 @@
 #include <vector>
 
 namespace pdbs {
-class CompressedProjection {
-    Pattern pattern;
-    std::vector<int> domain_sizes;
-    int num_abstract_states;
-    std::vector<int> hash_multipliers;
-public:
-    CompressedProjection(const TaskProxy &task_proxy, const Pattern &pattern);
 
-    // Compute the hash index (aka. the rank) of the given concrete state.
-    int rank(const std::vector<int> &state) const;
-
-    /*
-      Compute the value of a given variable in the abstract state given as
-      (hash) index.
-    */
-    int unrank(int index, int var) const;
-
-    const Pattern &get_pattern() const {
-        return pattern;
-    }
-
-    int get_num_abstract_states() const {
-        return num_abstract_states;
-    }
-
-    int get_multiplier(int var) const {
-        return hash_multipliers[var];
-    }
-};
 
 class CompressedPatternDatabase {
-    CompressedProjection projection;
+    Projection projection;
 
     /*
-      final h-values for abstract-states.
-      dead-ends are represented by numeric_limits<int>::max()
+      compressed h values for 5 states each
     */
-    std::vector<int> distances;
-    //TODO: distances ersetzen
+    std::vector<char> distances;
 public:
     CompressedPatternDatabase(
-        CompressedProjection&&projection,
-        std::vector<int> &&distances);
+        const PatternDatabase &pdb);
     int get_value(const std::vector<int> &state) const;
 
     const Pattern &get_pattern() const {

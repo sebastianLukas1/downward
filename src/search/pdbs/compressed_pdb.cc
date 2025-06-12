@@ -13,56 +13,28 @@
 using namespace std;
 
 namespace pdbs {
-CompressedProjection::CompressedProjection(
-    const TaskProxy &task_proxy, const Pattern &pattern)
-    : pattern(pattern) {
-    task_properties::verify_no_axioms(task_proxy);
-    task_properties::verify_no_conditional_effects(task_proxy);
-    assert(utils::is_sorted_unique(pattern));
-
-    domain_sizes.reserve(pattern.size());
-    hash_multipliers.reserve(pattern.size());
-    num_abstract_states = 1;
-    for (int pattern_var_id : pattern) {
-        hash_multipliers.push_back(num_abstract_states);
-        VariableProxy var = task_proxy.get_variables()[pattern_var_id];
-        int domain_size = var.get_domain_size();
-        domain_sizes.push_back(domain_size);
-        if (utils::is_product_within_limit(
-                num_abstract_states,
-                domain_size,
-                numeric_limits<int>::max())) {
-            num_abstract_states *= domain_size;
-        } else {
-            cerr << "Given pattern is too large! (Overflow occured): " << endl;
-            cerr << pattern << endl;
-            utils::exit_with(utils::ExitCode::SEARCH_CRITICAL_ERROR);
-        }
-    }
-}
-
-int CompressedProjection::rank(const vector<int> &state) const {
-    size_t index = 0;
-    for (size_t i = 0; i < pattern.size(); ++i) {
-        index += hash_multipliers[i] * state[pattern[i]];
-    }
-    return index;
-}
-
-int CompressedProjection::unrank(int index, int var) const {
-    int temp = index / hash_multipliers[var];
-    return temp % domain_sizes[var];
-}
 
 CompressedPatternDatabase::CompressedPatternDatabase(
-    CompressedProjection&&projection,
-    vector<int> &&distances)
-    : projection(move(projection)),
-      distances(move(distances)) {
+    const PatternDatabase &pdb)
+    : projection(pdb.getProjection()),
+      distances(static_cast<int>(ceil(pdb.get_size() / 5.0))) {
+
+    for (size_t i = 0; i < distances.size(); i++) {
+        int index = i / 5;
+        int subindex = i % 5;
+        int compressed_h_value = pdb.distances[i] % 3;
+        this->distances[index] += compressed_h_value * pow(3, subindex);
+    }
+
+    //cout << "     TEST: Compressed PDB constructed\n";
 }
 
 int CompressedPatternDatabase::get_value(const vector<int> &state) const {
-    return distances[projection.rank(state)];
+    int index = projection.rank(state) / 5;
+    int subindex = projection.rank(state) % 5;
+    char values = distances[index];
+    int result = ((int) (((int)values) / pow(3, subindex))) % ((int) pow(3, subindex + 1));
+    return result;
 }
 
 double CompressedPatternDatabase::compute_mean_finite_h() const {
