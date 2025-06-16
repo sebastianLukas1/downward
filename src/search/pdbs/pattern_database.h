@@ -53,6 +53,7 @@ public:
         Projection &&projection,
         std::vector<int> &&distances);
     int get_value(const std::vector<int> &state) const;
+    int get_value(const int index) const;
 
     const Pattern &get_pattern() const {
         return projection.get_pattern();

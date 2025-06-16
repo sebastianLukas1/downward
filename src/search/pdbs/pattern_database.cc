@@ -64,6 +64,9 @@ PatternDatabase::PatternDatabase(
 int PatternDatabase::get_value(const vector<int> &state) const {
     return distances[projection.rank(state)];
 }
+int PatternDatabase::get_value(const int index) const {
+    return distances[index];
+}
 
 double PatternDatabase::compute_mean_finite_h() const {
     double sum = 0;

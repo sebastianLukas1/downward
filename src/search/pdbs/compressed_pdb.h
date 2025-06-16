@@ -17,11 +17,16 @@ class CompressedPatternDatabase {
     /*
       compressed h values for 5 states each
     */
-    std::vector<char> distances;
+    std::vector<unsigned char> distances;
+    int initial_state_heuristic_value;
 public:
     CompressedPatternDatabase(
-        const PatternDatabase &pdb);
+        const PatternDatabase &pdb, std::vector<int> initial_state_values);
     int get_value(const std::vector<int> &state) const;
+
+    int get_initial_state_heuristic_value() {
+        return this->initial_state_heuristic_value;
+    };
 
     const Pattern &get_pattern() const {
         return projection.get_pattern();

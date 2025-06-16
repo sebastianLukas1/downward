@@ -15,25 +15,25 @@ using namespace std;
 namespace pdbs {
 
 CompressedPatternDatabase::CompressedPatternDatabase(
-    const PatternDatabase &pdb)
+    const PatternDatabase &pdb, std::vector<int> initial_state_values)
     : projection(pdb.getProjection()),
       distances(static_cast<int>(ceil(pdb.get_size() / 5.0))) {
+    this->initial_state_heuristic_value = pdb.get_value(initial_state_values);
 
-    for (size_t i = 0; i < distances.size(); i++) {
+    for (int i = 0; i < pdb.get_size(); i++) {
         int index = i / 5;
         int subindex = i % 5;
         int compressed_h_value = pdb.distances[i] % 3;
         this->distances[index] += compressed_h_value * pow(3, subindex);
     }
-
-    //cout << "     TEST: Compressed PDB constructed\n";
 }
 
 int CompressedPatternDatabase::get_value(const vector<int> &state) const {
-    int index = projection.rank(state) / 5;
-    int subindex = projection.rank(state) % 5;
-    char values = distances[index];
-    int result = ((int) (((int)values) / pow(3, subindex))) % ((int) pow(3, subindex + 1));
+    int index = projection.rank(state);
+    int i = index / 5;
+    int subindex = index % 5;
+    unsigned char values = distances[i];
+    int result = static_cast<int>(values / pow(3, subindex)) % 3;
     return result;
 }
 
