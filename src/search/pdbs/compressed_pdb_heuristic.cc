@@ -48,7 +48,7 @@ CompressedPDBHeuristic::CompressedPDBHeuristic(
       predecessor_state(nullptr),
       successor_state(nullptr) {
     if (!does_cache_estimates()) {
-        throw std::invalid_argument("Compressed PDB heuristic cannot be used with cache_estimates == false");
+        exit(EXIT_FAILURE);
     }
 }
 

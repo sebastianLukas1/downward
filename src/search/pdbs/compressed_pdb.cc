@@ -6,6 +6,7 @@
 #include "../utils/math.h"
 
 #include <cassert>
+#include <cmath>
 #include <iostream>
 #include <limits>
 #include <vector>
