@@ -6,9 +6,11 @@
 
 namespace pdbs {
 class PatternDatabase;
+class CompressedPatternDatabase;
 using Pattern = std::vector<int>;
 using PatternCollection = std::vector<Pattern>;
 using PDBCollection = std::vector<std::shared_ptr<PatternDatabase>>;
+using CompressedPDBCollection = std::vector<std::shared_ptr<CompressedPatternDatabase>>;
 using PatternID = int;
 /* NOTE: pattern cliques are often called maximal additive pattern subsets
    in the literature. A pattern clique is an additive set of patterns,
