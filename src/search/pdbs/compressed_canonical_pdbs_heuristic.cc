@@ -20,7 +20,7 @@ static CompressedCanonicalPDBs get_canonical_pdbs(
     double max_time_dominance_pruning, utils::LogProxy &log) {
     utils::Timer timer;
     if (log.is_at_least_normal()) {
-        log << "Initializing canonical PDB heuristic..." << endl;
+        log << "Initializing compressed canonical PDB heuristic..." << endl;
     }
     PatternCollectionInformation pattern_collection_info =
         pattern_generator->generate(task);
