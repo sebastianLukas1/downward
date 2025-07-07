@@ -14,8 +14,9 @@ class CompressedCanonicalPDBs {
 
 public:
     CompressedCanonicalPDBs(
-        const std::shared_ptr<PDBCollection> &pdbs,
-        const std::shared_ptr<std::vector<PatternClique>> &pattern_cliques);
+        const std::shared_ptr<PDBCollection>& pdbs,
+        const std::shared_ptr<std::vector<PatternClique>>& pattern_cliques,
+        const std::vector<int> initial_state_values);
     ~CompressedCanonicalPDBs() = default;
 
     int get_value(const State &state) const;

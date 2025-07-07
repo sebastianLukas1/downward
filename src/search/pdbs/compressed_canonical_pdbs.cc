@@ -1,5 +1,6 @@
 #include "compressed_canonical_pdbs.h"
 
+#include "compressed_pdb.h"
 #include "pattern_database.h"
 
 #include <algorithm>
@@ -12,8 +13,14 @@ using namespace std;
 namespace pdbs {
 CompressedCanonicalPDBs::CompressedCanonicalPDBs(
     const shared_ptr<PDBCollection> &pdbs,
-    const shared_ptr<vector<PatternClique>> &pattern_cliques)
-    : pdbs(pdbs), pattern_cliques(pattern_cliques) {
+    const shared_ptr<vector<PatternClique>> &pattern_cliques,
+    const vector<int> initial_state_values)
+    : pdbs(), pattern_cliques(pattern_cliques) {
+    for (const shared_ptr<PatternDatabase>& pdb : *pdbs) {
+        shared_ptr<CompressedPatternDatabase> cpdb = make_shared<CompressedPatternDatabase>(*pdb, initial_state_values);
+        this->pdbs->push_back(cpdb);
+    }
+    
     assert(pdbs);
     assert(pattern_cliques);
 }

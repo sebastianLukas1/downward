@@ -57,7 +57,24 @@ static CompressedCanonicalPDBs get_canonical_pdbs(
 
     dump_pattern_collection_generation_statistics(
         "Compressed Canonical PDB heuristic", timer(), pattern_collection_info, log);
-    return CanonicalPDBs(pdbs, pattern_cliques);
+    return CompressedCanonicalPDBs(pdbs, pattern_cliques, task->get_initial_state_values());
+}
+
+static int decompress_heuristic_value(int compressed_h, int predecessor_h) {
+    int compressed_predecessor_h = predecessor_h % 3;
+
+    //both h values are the same
+    if (compressed_h == compressed_predecessor_h) {
+        return predecessor_h;
+    }
+    //check if h is lower than predecessor_h
+    if ((compressed_h == 0 && compressed_predecessor_h == 1) ||
+        (compressed_h == 1 && compressed_predecessor_h == 2) ||
+        (compressed_h == 2 && compressed_predecessor_h == 0)) {
+        return predecessor_h - 1;
+    }
+    //otherwise h is higher than predecessor_h
+    return predecessor_h + 1;
 }
 
 CompressedCanonicalPDBsHeuristic::CompressedCanonicalPDBsHeuristic(
@@ -69,16 +86,28 @@ CompressedCanonicalPDBsHeuristic::CompressedCanonicalPDBsHeuristic(
       canonical_pdbs(
           get_canonical_pdbs(
               task, patterns, max_time_dominance_pruning, log)) {
+    if (!does_cache_estimates()) {
+        exit(EXIT_FAILURE);
+    }
 }
 
 int CompressedCanonicalPDBsHeuristic::compute_heuristic(const State &ancestor_state) {
     State state = convert_ancestor_state(ancestor_state);
-    int h = canonical_pdbs.get_value(state);
+    int compressed_h = canonical_pdbs.get_value(state);
+    int h;
     if (h == numeric_limits<int>::max()) {
         return DEAD_END;
     } else {
         return h;
     }
+}
+
+void CompressedCanonicalPDBsHeuristic::notify_state_transition(
+    const State& parent_state,
+    OperatorID op_id,
+    const State& state) {
+    this->predecessor_state = &parent_state;
+    this->successor_state = &state;
 }
 
 void add_compressed_canonical_pdbs_options_to_feature(plugins::Feature &feature) {
@@ -92,13 +121,13 @@ void add_compressed_canonical_pdbs_options_to_feature(plugins::Feature &feature)
         plugins::Bounds("0.0", "infinity"));
 }
 
-tuple<double> get_canonical_pdbs_arguments_from_options(
+tuple<double> get_compressed_canonical_pdbs_arguments_from_options(
     const plugins::Options &opts) {
     return make_tuple(opts.get<double>("max_time_dominance_pruning"));
 }
 
 class CompressedCanonicalPDBsHeuristicFeature
-    : public plugins::TypedFeature<Evaluator, CanonicalPDBsHeuristic> {
+    : public plugins::TypedFeature<Evaluator, CompressedCanonicalPDBsHeuristic> {
 public:
     CompressedCanonicalPDBsHeuristicFeature() : TypedFeature("compressed_cpdbs") {
         document_subcategory("heuristics_pdb");
@@ -128,12 +157,12 @@ public:
         document_property("preferred operators", "no");
     }
 
-    virtual shared_ptr<CanonicalPDBsHeuristic>
+    virtual shared_ptr<CompressedCanonicalPDBsHeuristic>
     create_component(const plugins::Options &opts) const override {
-        return plugins::make_shared_from_arg_tuples<CanonicalPDBsHeuristic>(
+        return plugins::make_shared_from_arg_tuples<CompressedCanonicalPDBsHeuristic>(
             opts.get<shared_ptr<PatternCollectionGenerator>>(
                 "patterns"),
-            get_canonical_pdbs_arguments_from_options(opts),
+            get_compressed_canonical_pdbs_arguments_from_options(opts),
             get_heuristic_arguments_from_options(opts)
             );
     }

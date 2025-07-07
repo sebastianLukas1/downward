@@ -14,6 +14,8 @@ namespace pdbs {
 // Implements the canonical heuristic function.
 class CompressedCanonicalPDBsHeuristic : public Heuristic {
     CompressedCanonicalPDBs canonical_pdbs;
+    const State *predecessor_state;
+    const State* successor_state;
 
 protected:
     virtual int compute_heuristic(const State &ancestor_state) override;
@@ -25,6 +27,11 @@ public:
         const std::shared_ptr<AbstractTask> &transform,
         bool cache_estimates, const std::string &description,
         utils::Verbosity verbosity);
+
+    virtual void notify_state_transition(
+        const State& parent_state,
+        OperatorID op_id,
+        const State& state) override;
 };
 
 void add_canonical_pdbs_options_to_feature(plugins::Feature &feature);

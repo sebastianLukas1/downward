@@ -891,6 +891,8 @@ create_fast_downward_library(
         pdbs/canonical_pdbs
         pdbs/canonical_pdbs_heuristic
         pdbs/cegar
+        pdbs/compressed_canonical_pdbs
+        pdbs/compressed_canonical_pdbs_heuristic
         pdbs/compressed_pdb
         pdbs/compressed_pdb_heuristic
         pdbs/dominance_pruning
