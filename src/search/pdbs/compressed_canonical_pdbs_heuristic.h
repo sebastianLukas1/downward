@@ -15,7 +15,7 @@ namespace pdbs {
 class CompressedCanonicalPDBsHeuristic : public Heuristic {
     CompressedCanonicalPDBs canonical_pdbs;
     const State *predecessor_state;
-    const State* successor_state;
+    const State *successor_state;
 
 protected:
     virtual int compute_heuristic(const State &ancestor_state) override;
@@ -32,6 +32,7 @@ public:
         const State& parent_state,
         OperatorID op_id,
         const State& state) override;
+    virtual void notify_initial_state(const State& /*initial_state*/) override;
 };
 
 void add_canonical_pdbs_options_to_feature(plugins::Feature &feature);

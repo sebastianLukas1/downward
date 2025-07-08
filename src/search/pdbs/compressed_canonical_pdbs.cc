@@ -25,7 +25,7 @@ CompressedCanonicalPDBs::CompressedCanonicalPDBs(
     assert(pattern_cliques);
 }
 
-int CompressedCanonicalPDBs::get_value(const State &state) const {
+int CompressedCanonicalPDBs::get_value(const State &state, const State& predecessor_state) const {
     // If we have an empty collection, then pattern_cliques = { \emptyset }.
     assert(!pattern_cliques->empty());
     int max_h = 0;
@@ -33,7 +33,7 @@ int CompressedCanonicalPDBs::get_value(const State &state) const {
     h_values.reserve(pdbs->size());
     state.unpack();
     for (const shared_ptr<CompressedPatternDatabase> &pdb : *pdbs) {
-        int h = pdb->get_value(state.get_unpacked_values());
+        int h = pdb->get_full_value(state.get_unpacked_values(), predecessor_state.get_unpacked_values());
         if (h == numeric_limits<int>::max()) {
             return numeric_limits<int>::max();
         }

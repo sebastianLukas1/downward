@@ -19,7 +19,7 @@ public:
         const std::vector<int> initial_state_values);
     ~CompressedCanonicalPDBs() = default;
 
-    int get_value(const State &state) const;
+    int get_value(const State &state, const State &predecessor_state) const;
 };
 }
 

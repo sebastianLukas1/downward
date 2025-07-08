@@ -18,11 +18,13 @@ class CompressedPatternDatabase {
       compressed h values for 5 states each
     */
     std::vector<unsigned char> distances;
+    std::unordered_map<int, int> cached_values;
     int initial_state_heuristic_value;
 public:
     CompressedPatternDatabase(
         const PatternDatabase &pdb, std::vector<int> initial_state_values);
-    int get_value(const std::vector<int> &state) const;
+    int get_value(const std::vector<int>& state) const;
+    int get_full_value(const std::vector<int> &state, const std::vector<int> &predecessor_state);
 
     int get_initial_state_heuristic_value() {
         return this->initial_state_heuristic_value;

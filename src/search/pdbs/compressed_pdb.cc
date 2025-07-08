@@ -14,12 +14,31 @@
 using namespace std;
 
 namespace pdbs {
+    static int decompress_heuristic_value(int compressed_h, int predecessor_h) {
+        int compressed_predecessor_h = predecessor_h % 3;
+
+        //both h values are the same
+        if (compressed_h == compressed_predecessor_h) {
+            return predecessor_h;
+        }
+        //check if h is lower than predecessor_h
+        if ((compressed_h == 0 && compressed_predecessor_h == 1) ||
+            (compressed_h == 1 && compressed_predecessor_h == 2) ||
+            (compressed_h == 2 && compressed_predecessor_h == 0)) {
+            return predecessor_h - 1;
+        }
+        //otherwise h is higher than predecessor_h
+        return predecessor_h + 1;
+    }
 
 CompressedPatternDatabase::CompressedPatternDatabase(
     const PatternDatabase &pdb, std::vector<int> initial_state_values)
     : projection(pdb.getProjection()),
-      distances(static_cast<int>(ceil(pdb.get_size() / 5.0))) {
+      distances(static_cast<int>(ceil(pdb.get_size() / 5.0))),
+      cached_values() {
     this->initial_state_heuristic_value = pdb.get_value(initial_state_values);
+    int initial_state_index = projection.rank(initial_state_values);
+    this->cached_values[initial_state_index] = this->initial_state_heuristic_value;
 
     for (int i = 0; i < pdb.get_size(); i++) {
         int index = i / 5;
@@ -36,6 +55,22 @@ int CompressedPatternDatabase::get_value(const vector<int> &state) const {
     unsigned char values = distances[i];
     int result = static_cast<int>(values / pow(3, subindex)) % 3;
     return result;
+}
+
+int CompressedPatternDatabase::get_full_value(const std::vector<int>& state, const std::vector<int>& predecessor_state) {
+    int predecessor_index = projection.rank(predecessor_state);
+    int predecessor_h = cached_values[predecessor_index];
+    if (predecessor_h == 0) {
+        cout << "       ERROR: the predecessor has h=0";
+        exit(EXIT_FAILURE);
+    }
+
+    int index = projection.rank(state);
+    int compressed_h = get_value(state);
+    int h = decompress_heuristic_value(compressed_h, predecessor_h);
+
+    this->cached_values[index] = h;
+    return h;
 }
 
 double CompressedPatternDatabase::compute_mean_finite_h() const {

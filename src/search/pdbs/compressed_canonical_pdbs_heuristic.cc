@@ -86,15 +86,15 @@ CompressedCanonicalPDBsHeuristic::CompressedCanonicalPDBsHeuristic(
       canonical_pdbs(
           get_canonical_pdbs(
               task, patterns, max_time_dominance_pruning, log)) {
-    if (!does_cache_estimates()) {
+    /*if (!does_cache_estimates()) {
         exit(EXIT_FAILURE);
-    }
+    }*/
 }
 
 int CompressedCanonicalPDBsHeuristic::compute_heuristic(const State &ancestor_state) {
     State state = convert_ancestor_state(ancestor_state);
-    int compressed_h = canonical_pdbs.get_value(state);
-    int h;
+    cout << "       TEST: compute h of state " << state.get_id() << endl;
+    int h = canonical_pdbs.get_value(state, *predecessor_state);
     if (h == numeric_limits<int>::max()) {
         return DEAD_END;
     } else {
@@ -107,7 +107,11 @@ void CompressedCanonicalPDBsHeuristic::notify_state_transition(
     OperatorID op_id,
     const State& state) {
     this->predecessor_state = &parent_state;
+    OperatorID id = op_id;
     this->successor_state = &state;
+}
+void CompressedCanonicalPDBsHeuristic::notify_initial_state(const State& initial_state) {
+    this->predecessor_state = &initial_state;
 }
 
 void add_compressed_canonical_pdbs_options_to_feature(plugins::Feature &feature) {
