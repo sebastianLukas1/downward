@@ -36,9 +36,12 @@ CompressedPatternDatabase::CompressedPatternDatabase(
     : projection(pdb.getProjection()),
       distances(static_cast<int>(ceil(pdb.get_size() / 5.0))),
       cached_values() {
+    cout << "   TEST: CPDB construction started" << endl;
     this->initial_state_heuristic_value = pdb.get_value(initial_state_values);
     int initial_state_index = projection.rank(initial_state_values);
+    cout << "   TEST: index of initial state: " << initial_state_index << endl;
     this->cached_values[initial_state_index] = this->initial_state_heuristic_value;
+    cout << "   TEST: added initial_state_heuristic_value to cache" << endl;
 
     for (int i = 0; i < pdb.get_size(); i++) {
         int index = i / 5;
@@ -46,6 +49,7 @@ CompressedPatternDatabase::CompressedPatternDatabase(
         int compressed_h_value = pdb.distances[i] % 3;
         this->distances[index] += compressed_h_value * pow(3, subindex);
     }
+    cout << "   TEST: CPDB construction complete" << endl;
 }
 
 int CompressedPatternDatabase::get_value(const vector<int> &state) const {

@@ -16,13 +16,19 @@ CompressedCanonicalPDBs::CompressedCanonicalPDBs(
     const shared_ptr<vector<PatternClique>> &pattern_cliques,
     const vector<int> initial_state_values)
     : pdbs(), pattern_cliques(pattern_cliques) {
+    cout << "       TEST: started CompressedCanonicalPDBs construction \n";
+    cout << "       TEST: need to reserve space for " << pdbs->size() << " PDBs" << endl;
+    this->pdbs->reserve(pdbs->size());
     for (const shared_ptr<PatternDatabase>& pdb : *pdbs) {
         shared_ptr<CompressedPatternDatabase> cpdb = make_shared<CompressedPatternDatabase>(*pdb, initial_state_values);
+        cout << "       TEST: CPDB for CCPDB constructed \n";
         this->pdbs->push_back(cpdb);
+        cout << "       TEST: CPDB added to CCPDB collection \n";
     }
     
     assert(pdbs);
     assert(pattern_cliques);
+    cout << "       TEST: constructed CompressedCanonicalPDBs \n";
 }
 
 int CompressedCanonicalPDBs::get_value(const State &state, const State& predecessor_state) const {

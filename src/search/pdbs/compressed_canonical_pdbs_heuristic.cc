@@ -106,11 +106,13 @@ void CompressedCanonicalPDBsHeuristic::notify_state_transition(
     const State& parent_state,
     OperatorID op_id,
     const State& state) {
+    cout << "       TEST: notify state transition" << endl;
     this->predecessor_state = &parent_state;
     OperatorID id = op_id;
     this->successor_state = &state;
 }
 void CompressedCanonicalPDBsHeuristic::notify_initial_state(const State& initial_state) {
+    cout << "       TEST: notify initial state" << endl;
     this->predecessor_state = &initial_state;
 }
 
