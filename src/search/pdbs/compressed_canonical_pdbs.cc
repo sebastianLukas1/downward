@@ -15,7 +15,7 @@ CompressedCanonicalPDBs::CompressedCanonicalPDBs(
     const shared_ptr<PDBCollection> &pdbs,
     const shared_ptr<vector<PatternClique>> &pattern_cliques,
     const vector<int> initial_state_values)
-    : pdbs(), pattern_cliques(pattern_cliques) {
+    : pdbs(new vector<shared_ptr<CompressedPatternDatabase>>()), pattern_cliques(pattern_cliques) {
     cout << "       TEST: started CompressedCanonicalPDBs construction \n";
     cout << "       TEST: need to reserve space for " << pdbs->size() << " PDBs" << endl;
     this->pdbs->reserve(pdbs->size());
@@ -32,6 +32,7 @@ CompressedCanonicalPDBs::CompressedCanonicalPDBs(
 }
 
 int CompressedCanonicalPDBs::get_value(const State &state, const State& predecessor_state) const {
+    cout << "           TEST: compute h with state " << state.get_id() << " and predecessor " << predecessor_state.get_id() << endl;
     // If we have an empty collection, then pattern_cliques = { \emptyset }.
     assert(!pattern_cliques->empty());
     int max_h = 0;
