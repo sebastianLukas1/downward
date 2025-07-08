@@ -28,6 +28,11 @@ public:
         bool cache_estimates, const std::string &description,
         utils::Verbosity verbosity);
 
+    virtual void get_path_dependent_evaluators(
+        std::set<Evaluator*>& evals) override {
+        evals.insert(this);
+    }
+
     virtual void notify_state_transition(
         const State& parent_state,
         OperatorID op_id,

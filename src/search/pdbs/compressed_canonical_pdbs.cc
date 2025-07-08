@@ -16,29 +16,25 @@ CompressedCanonicalPDBs::CompressedCanonicalPDBs(
     const shared_ptr<vector<PatternClique>> &pattern_cliques,
     const vector<int> initial_state_values)
     : pdbs(new vector<shared_ptr<CompressedPatternDatabase>>()), pattern_cliques(pattern_cliques) {
-    cout << "       TEST: started CompressedCanonicalPDBs construction \n";
-    cout << "       TEST: need to reserve space for " << pdbs->size() << " PDBs" << endl;
     this->pdbs->reserve(pdbs->size());
     for (const shared_ptr<PatternDatabase>& pdb : *pdbs) {
         shared_ptr<CompressedPatternDatabase> cpdb = make_shared<CompressedPatternDatabase>(*pdb, initial_state_values);
-        cout << "       TEST: CPDB for CCPDB constructed \n";
         this->pdbs->push_back(cpdb);
-        cout << "       TEST: CPDB added to CCPDB collection \n";
     }
     
     assert(pdbs);
     assert(pattern_cliques);
-    cout << "       TEST: constructed CompressedCanonicalPDBs \n";
 }
 
 int CompressedCanonicalPDBs::get_value(const State &state, const State& predecessor_state) const {
-    cout << "           TEST: compute h with state " << state.get_id() << " and predecessor " << predecessor_state.get_id() << endl;
     // If we have an empty collection, then pattern_cliques = { \emptyset }.
     assert(!pattern_cliques->empty());
     int max_h = 0;
     vector<int> h_values;
     h_values.reserve(pdbs->size());
     state.unpack();
+    predecessor_state.unpack();
+    cout << "           TEST: compute h with state " << state.get_id() << " and predecessor " << predecessor_state.get_id() << endl;
     for (const shared_ptr<CompressedPatternDatabase> &pdb : *pdbs) {
         int h = pdb->get_full_value(state.get_unpacked_values(), predecessor_state.get_unpacked_values());
         if (h == numeric_limits<int>::max()) {

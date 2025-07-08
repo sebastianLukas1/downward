@@ -93,8 +93,8 @@ CompressedCanonicalPDBsHeuristic::CompressedCanonicalPDBsHeuristic(
 
 int CompressedCanonicalPDBsHeuristic::compute_heuristic(const State &ancestor_state) {
     State state = convert_ancestor_state(ancestor_state);
-    cout << "       TEST: compute h of state " << state.get_id() << endl;
     int h = canonical_pdbs.get_value(state, *predecessor_state);
+    cout << "       TEST: h of state " << state.get_id() << ": " << h << endl;
     if (h == numeric_limits<int>::max()) {
         return DEAD_END;
     } else {
@@ -106,13 +106,13 @@ void CompressedCanonicalPDBsHeuristic::notify_state_transition(
     const State& parent_state,
     OperatorID op_id,
     const State& state) {
-    cout << "       TEST: notify state transition" << endl;
+    //cout << "       TEST: notify state transition" << endl;
     this->predecessor_state = &parent_state;
     OperatorID id = op_id;
     this->successor_state = &state;
 }
 void CompressedCanonicalPDBsHeuristic::notify_initial_state(const State& initial_state) {
-    cout << "       TEST: notify initial state" << endl;
+    //cout << "       TEST: notify initial state" << endl;
     this->predecessor_state = &initial_state;
 }
 
