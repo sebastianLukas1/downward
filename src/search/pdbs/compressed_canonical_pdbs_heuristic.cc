@@ -94,7 +94,7 @@ CompressedCanonicalPDBsHeuristic::CompressedCanonicalPDBsHeuristic(
 int CompressedCanonicalPDBsHeuristic::compute_heuristic(const State &ancestor_state) {
     State state = convert_ancestor_state(ancestor_state);
     int h = canonical_pdbs.get_value(state, *predecessor_state);
-    cout << "       TEST: h of state " << state.get_id() << ": " << h << endl;
+    //cout << "       TEST: h of state " << state.get_id() << ": " << h << endl;
     if (h == numeric_limits<int>::max()) {
         return DEAD_END;
     } else {

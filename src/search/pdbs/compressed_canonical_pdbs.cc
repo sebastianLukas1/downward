@@ -34,7 +34,7 @@ int CompressedCanonicalPDBs::get_value(const State &state, const State& predeces
     h_values.reserve(pdbs->size());
     state.unpack();
     predecessor_state.unpack();
-    cout << "           TEST: compute h with state " << state.get_id() << " and predecessor " << predecessor_state.get_id() << endl;
+    //cout << "       TEST: compute h with state " << state.get_id() << " and predecessor " << predecessor_state.get_id() << endl;
     for (const shared_ptr<CompressedPatternDatabase> &pdb : *pdbs) {
         int h = pdb->get_full_value(state.get_unpacked_values(), predecessor_state.get_unpacked_values());
         if (h == numeric_limits<int>::max()) {
