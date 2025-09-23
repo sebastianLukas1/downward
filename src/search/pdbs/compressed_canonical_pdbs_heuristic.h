@@ -40,8 +40,8 @@ public:
     virtual void notify_initial_state(const State& /*initial_state*/) override;
 };
 
-void add_canonical_pdbs_options_to_feature(plugins::Feature &feature);
-std::tuple<double> get_canonical_pdbs_arguments_from_options(
+void add_compressed_canonical_pdbs_options_to_feature(plugins::Feature &feature);
+std::tuple<double> get_compressed_canonical_pdbs_arguments_from_options(
     const plugins::Options &opts);
 }
 
