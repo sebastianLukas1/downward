@@ -46,6 +46,13 @@ def get_post_condition(op_id, op_pre, op_eff):
         post_o[v] = op_eff[op_id][v]
     return post_o
 
+#combine two partial states by copying the first one and then writing the second one over the first one
+def combine_dicts_in_order(d_one, d_two):
+    result = d_one.copy()
+    for v in d_two:
+        result[v] = d_two[v]
+    return result
+
 def construct_partial_states(partial_states, partial_state, v_zero, var_domains, count):
     if count >= len(v_zero):
         partial_states.append(partial_state)
@@ -73,14 +80,18 @@ def is_inverse(op_id, o_inv, context, op_pre, op_eff):
     #check if o results in a state where o_inv is applicable
     for v in op_pre[o_inv]:
         if v not in post_o or post_o[v] != op_pre[o_inv][v]:
-            print("o_inv: ", o_inv, "v: ", v, ",", op_pre[o_inv][v], "post_o: ", post_o)
             return False
-            
-    #check
-    #for v in context:
-        #if v not in op_eff[o_inv] or op_eff[o_inv][v] != context[v]:
-            #return False
-    #TODO
+
+    #check if post(o_inv) results in before(o)
+    post_o_inv = combine_dicts_in_order(post_o, op_eff[o_inv])
+    before_o = combine_dicts_in_order(op_pre[op_id], context)
+    if len(post_o_inv) != len(before_o):
+        return False
+    for v in before_o:
+        if post_o_inv[v] != before_o[v]:
+            return False
+
+    #print("the operator", o_inv, "is the inverse of", op_id, "with context", context)
     return True
 
 #check if an operator is invertible
@@ -88,10 +99,11 @@ def has_inverse(op_id, op_pre, op_eff, op_v_zero, op_count, var_domains):
     partial_states = get_partial_states(op_v_zero[op_id], var_domains)
     for context in partial_states:
         for o_inv in range(0, op_count):
-            print("checking invertibility for o=", op_id, " and o_inv=", o_inv)
+            #print("checking invertibility for o=", op_id, " and o_inv=", o_inv)
             if is_inverse(op_id, o_inv, context, op_pre, op_eff):
                 break
         else:
+            print("operator", op_id, "has no inverse for context", context)
             return False
     return True
 
