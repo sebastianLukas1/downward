@@ -16,7 +16,6 @@ using namespace std;
 namespace pdbs {
     static int decompress_heuristic_value(int compressed_h, int predecessor_h) {
         int compressed_predecessor_h = predecessor_h % 3;
-        //cout << "           TEST: c_h: " << compressed_h << ", pred_h: " << predecessor_h << endl;
 
         //both h values are the same
         if (compressed_h == compressed_predecessor_h) {

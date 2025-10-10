@@ -4,6 +4,7 @@
 
 #include "../plugins/plugin.h"
 #include "../utils/markup.h"
+#include "../utils/timer.h"
 
 #include <limits>
 #include <memory>
@@ -16,9 +17,14 @@ namespace pdbs {
 static shared_ptr<CompressedPatternDatabase> get_pdb_from_generator(
     const shared_ptr<AbstractTask> &task,
     const shared_ptr<PatternGenerator> &pattern_generator) {
+    utils::Timer timer;
     PatternInformation pattern_info = pattern_generator->generate(task);
     shared_ptr<PatternDatabase> pdb = pattern_info.get_pdb();
     shared_ptr<CompressedPatternDatabase> cpdb = make_shared<CompressedPatternDatabase>(*pdb, task->get_initial_state_values());
+
+    cout << "PDB build time: " << timer() << endl;
+    int pdb_memory = sizeof(CompressedPatternDatabase) + cpdb->distances.size();
+    cout << "PDB size: " << pdb_memory << endl;
     return cpdb;
 }
 

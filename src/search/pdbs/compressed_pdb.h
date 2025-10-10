@@ -14,13 +14,15 @@ namespace pdbs {
 class CompressedPatternDatabase {
     Projection projection;
 
+    
+    std::unordered_map<int, int> cached_values;
+    int initial_state_heuristic_value;
+public:
     /*
       compressed h values for 5 states each
     */
     std::vector<unsigned char> distances;
-    std::unordered_map<int, int> cached_values;
-    int initial_state_heuristic_value;
-public:
+
     CompressedPatternDatabase(
         const PatternDatabase &pdb, std::vector<int> initial_state_values);
     int get_value(const std::vector<int>& state) const;

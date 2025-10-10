@@ -1,6 +1,7 @@
 #include "canonical_pdbs_heuristic.h"
 
 #include "dominance_pruning.h"
+#include "pattern_database.h"
 #include "utils.h"
 
 #include "../plugins/plugin.h"
@@ -53,6 +54,17 @@ static CanonicalPDBs get_canonical_pdbs(
             num_variables,
             max_time_dominance_pruning,
             log);
+    }
+
+    if (log.is_at_least_normal()) {
+        log << "PDB build time: " << timer() << endl;
+    }
+    int pdb_memory = sizeof(pdbs) + pdbs->size() * sizeof(PatternDatabase);
+    for (unsigned int i = 0; i < pdbs->size(); i++) {
+        pdb_memory += pdbs->at(i)->distances.size() * sizeof(int);
+    }
+    if (log.is_at_least_normal()) {
+        log << "PDB size: " << pdb_memory << endl;
     }
 
     dump_pattern_collection_generation_statistics(

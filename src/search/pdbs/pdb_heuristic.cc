@@ -4,6 +4,7 @@
 
 #include "../plugins/plugin.h"
 #include "../utils/markup.h"
+#include "../utils/timer.h"
 
 #include <limits>
 #include <memory>
@@ -14,8 +15,14 @@ namespace pdbs {
 static shared_ptr<PatternDatabase> get_pdb_from_generator(
     const shared_ptr<AbstractTask> &task,
     const shared_ptr<PatternGenerator> &pattern_generator) {
+    utils::Timer timer;
     PatternInformation pattern_info = pattern_generator->generate(task);
-    return pattern_info.get_pdb();
+
+    cout << "PDB build time: " << timer() << endl;
+    shared_ptr<PatternDatabase> result = pattern_info.get_pdb();
+    int pdb_memory = sizeof(PatternDatabase) + (result->distances.size() * sizeof(int));
+    cout << "PDB size: " << pdb_memory << endl;
+    return result;
 }
 
 PDBHeuristic::PDBHeuristic(

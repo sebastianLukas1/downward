@@ -1,5 +1,6 @@
 #include "compressed_canonical_pdbs_heuristic.h"
 
+#include "compressed_pdb.h"
 #include "dominance_pruning.h"
 #include "utils.h"
 
@@ -53,6 +54,17 @@ static CompressedCanonicalPDBs get_canonical_pdbs(
             num_variables,
             max_time_dominance_pruning,
             log);
+    }
+
+    if (log.is_at_least_normal()) {
+        log << "PDB build time: " << timer() << endl;
+    }
+    int pdb_memory = sizeof(pdbs) + pdbs->size() * sizeof(CompressedPatternDatabase);
+    for (unsigned int i = 0; i < pdbs->size(); i++) {
+        pdb_memory += pdbs->at(i)->distances.size();
+    }
+    if (log.is_at_least_normal()) {
+        log << "PDB size: " << pdb_memory << endl;
     }
 
     dump_pattern_collection_generation_statistics(
