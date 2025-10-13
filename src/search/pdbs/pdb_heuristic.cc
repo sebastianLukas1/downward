@@ -21,7 +21,7 @@ static shared_ptr<PatternDatabase> get_pdb_from_generator(
     cout << "PDB build time: " << timer() << endl;
     shared_ptr<PatternDatabase> result = pattern_info.get_pdb();
     int pdb_memory = sizeof(PatternDatabase) + (result->distances.size() * sizeof(int));
-    cout << "PDB size: " << pdb_memory << endl;
+    cout << "PDB memory: " << pdb_memory << endl;
     return result;
 }
 

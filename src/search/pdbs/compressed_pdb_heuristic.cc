@@ -24,7 +24,7 @@ static shared_ptr<CompressedPatternDatabase> get_pdb_from_generator(
 
     cout << "PDB build time: " << timer() << endl;
     int pdb_memory = sizeof(CompressedPatternDatabase) + cpdb->distances.size();
-    cout << "PDB size: " << pdb_memory << endl;
+    cout << "PDB memory: " << pdb_memory << endl;
     return cpdb;
 }
 

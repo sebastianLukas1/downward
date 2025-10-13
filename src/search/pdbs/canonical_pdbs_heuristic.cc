@@ -64,7 +64,7 @@ static CanonicalPDBs get_canonical_pdbs(
         pdb_memory += pdbs->at(i)->distances.size() * sizeof(int);
     }
     if (log.is_at_least_normal()) {
-        log << "PDB size: " << pdb_memory << endl;
+        log << "PDB memory: " << pdb_memory << endl;
     }
 
     dump_pattern_collection_generation_statistics(
