@@ -48,6 +48,7 @@ CompressedPatternDatabase::CompressedPatternDatabase(
     }
 }
 
+//returns compressed h value
 int CompressedPatternDatabase::get_value(const vector<int> &state) const {
     int index = projection.rank(state);
     int i = index / 5;
@@ -57,15 +58,22 @@ int CompressedPatternDatabase::get_value(const vector<int> &state) const {
     return result;
 }
 
+//returns the decompressed h value
 int CompressedPatternDatabase::get_full_value(const std::vector<int>& state, const std::vector<int>& predecessor_state) {
+    int index = projection.rank(state);
+    if (cached_values.contains(index)) {
+        return cached_values[index];
+    }
+    
     int predecessor_index = projection.rank(predecessor_state);
     int predecessor_h = cached_values[predecessor_index];
 
-    int index = projection.rank(state);
+    
     int compressed_h = get_value(state);
     int h = decompress_heuristic_value(compressed_h, predecessor_h);
 
     this->cached_values[index] = h;
+    cout << "cached a new value" << endl;
     return h;
 }
 

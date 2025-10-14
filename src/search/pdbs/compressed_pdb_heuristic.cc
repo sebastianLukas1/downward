@@ -53,16 +53,16 @@ CompressedPDBHeuristic::CompressedPDBHeuristic(
       pdb(get_pdb_from_generator(task, pattern)),
       predecessor_state(nullptr),
       successor_state(nullptr) {
-    if (!does_cache_estimates()) {
+    /*if (!does_cache_estimates()) {
         exit(EXIT_FAILURE);
-    }
+    }*/
 }
 
 int CompressedPDBHeuristic::compute_heuristic(const State &ancestor_state) {
     //check if the heuristic value is already cached
-    if (is_estimate_cached(ancestor_state)) {
+    /*if (is_estimate_cached(ancestor_state)) {
         return get_cached_estimate(ancestor_state);
-    }
+    }*/
     //if there is no predecessor state, we are at the initial state
     if (this->predecessor_state == nullptr) {
         return pdb->get_initial_state_heuristic_value();
@@ -74,9 +74,15 @@ int CompressedPDBHeuristic::compute_heuristic(const State &ancestor_state) {
         cout << "       ERROR: wrong state, got " << ancestor_state.get_id() << " instead of " << successor_state->get_id() << endl;
     }
 
-    int predecessor_h = compute_heuristic(*predecessor_state);
+    /*int predecessor_h = compute_heuristic(*predecessor_state);
     int compressed_h = pdb->get_value(state.get_unpacked_values());
-    int h = decompress_heuristic_value(compressed_h, predecessor_h);
+    int h = decompress_heuristic_value(compressed_h, predecessor_h);*/
+
+    state.unpack();
+    std::vector<int> unpacked_state = state.get_unpacked_values();
+    this->predecessor_state->unpack();
+    std::vector<int> unpacked_predecessor = this->predecessor_state->get_unpacked_values();
+    int h = pdb->get_full_value(unpacked_state, unpacked_predecessor);
     if (h == numeric_limits<int>::max())
         return DEAD_END;
     return h;
