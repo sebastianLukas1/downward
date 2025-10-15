@@ -20,6 +20,8 @@ public:
     ~CompressedCanonicalPDBs() = default;
 
     int get_value(const State &state, const State &predecessor_state) const;
+
+    int get_cache_size();
 };
 }
 

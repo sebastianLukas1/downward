@@ -95,6 +95,10 @@ void CompressedPDBHeuristic::notify_state_transition(
     this->successor_state = &state;
 }
 
+void CompressedPDBHeuristic::print_statistics() {
+    cout << "PDB cache size: " << pdb->get_cache_size() << endl;
+}
+
 static basic_string<char> paper_references() {
     return utils::format_conference_reference(
         {"Stefan Edelkamp"},

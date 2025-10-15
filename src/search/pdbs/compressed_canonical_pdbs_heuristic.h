@@ -38,6 +38,8 @@ public:
         OperatorID op_id,
         const State& state) override;
     virtual void notify_initial_state(const State& /*initial_state*/) override;
+
+    void print_statistics() override;
 };
 
 void add_compressed_canonical_pdbs_options_to_feature(plugins::Feature &feature);

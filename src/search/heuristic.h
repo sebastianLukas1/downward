@@ -44,6 +44,8 @@ class Heuristic : public Evaluator {
     */
     ordered_set::OrderedSet<OperatorID> preferred_operators;
 
+    virtual void print_statistics();
+
 protected:
     /*
       Cache for saving h values

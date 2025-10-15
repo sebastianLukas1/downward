@@ -112,6 +112,12 @@ void EagerSearch::print_statistics() const {
     statistics.print_detailed_statistics();
     search_space.print_statistics();
     pruning_method->print_statistics();
+    for (Evaluator* pd_evaluator : path_dependent_evaluators) {
+        pd_evaluator->print_statistics();
+    }
+    if (path_dependent_evaluators.size() == 0) {
+        f_evaluator->print_statistics();
+    }
 }
 
 SearchStatus EagerSearch::step() {

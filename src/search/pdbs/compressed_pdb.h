@@ -49,6 +49,8 @@ public:
       this method!
     */
     double compute_mean_finite_h() const;
+
+    int get_cache_size();
 };
 }
 

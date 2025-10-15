@@ -51,4 +51,12 @@ int CompressedCanonicalPDBs::get_value(const State &state, const State& predeces
     }
     return max_h;
 }
+
+int CompressedCanonicalPDBs::get_cache_size() {
+    int total_cache_size = 0;
+    for (const shared_ptr<CompressedPatternDatabase>& pdb : *pdbs) {
+        total_cache_size += pdb->get_cache_size();
+    }
+    return total_cache_size;
+}
 }

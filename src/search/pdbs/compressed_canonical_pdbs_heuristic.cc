@@ -128,6 +128,10 @@ void CompressedCanonicalPDBsHeuristic::notify_initial_state(const State& initial
     this->predecessor_state = &initial_state;
 }
 
+void CompressedCanonicalPDBsHeuristic::print_statistics() {
+    cout << "PDB cache size: " << canonical_pdbs.get_cache_size() << endl;
+}
+
 void add_compressed_canonical_pdbs_options_to_feature(plugins::Feature &feature) {
     feature.add_option<double>(
         "max_time_dominance_pruning",

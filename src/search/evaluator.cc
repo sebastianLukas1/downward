@@ -46,6 +46,10 @@ void Evaluator::report_new_minimum_value(
     }
 }
 
+void Evaluator::print_statistics() {
+    cout << "PDB cache size: 0" << endl;
+}
+
 const string &Evaluator::get_description() const {
     return description;
 }

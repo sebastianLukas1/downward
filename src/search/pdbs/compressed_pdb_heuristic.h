@@ -44,6 +44,8 @@ public:
         const State &parent_state,
         OperatorID op_id,
         const State &state) override;
+
+    void print_statistics();
 };
 }
 

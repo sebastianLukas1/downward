@@ -73,7 +73,7 @@ int CompressedPatternDatabase::get_full_value(const std::vector<int>& state, con
     int h = decompress_heuristic_value(compressed_h, predecessor_h);
 
     this->cached_values[index] = h;
-    cout << "cached a new value" << endl;
+    //cout << "cached a new value" << endl;
     return h;
 }
 
@@ -91,5 +91,9 @@ double CompressedPatternDatabase::compute_mean_finite_h() const {
     } else {
         return sum / size;
     }
+}
+
+int CompressedPatternDatabase::get_cache_size() {
+    return this->cached_values.size();
 }
 }

@@ -27,6 +27,10 @@ Heuristic::Heuristic(
 Heuristic::~Heuristic() {
 }
 
+void Heuristic::print_statistics() {
+    cout << "PDB cache size: 0" << endl;
+}
+
 void Heuristic::set_preferred(const OperatorProxy &op) {
     preferred_operators.insert(op.get_ancestor_operator_id(tasks::g_root_task.get()));
 }
