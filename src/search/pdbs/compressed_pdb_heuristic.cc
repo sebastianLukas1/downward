@@ -69,10 +69,6 @@ int CompressedPDBHeuristic::compute_heuristic(const State &ancestor_state) {
     }
 
     State state = convert_ancestor_state(ancestor_state);
-    //TODO: remove or throw exception
-    if (ancestor_state.get_id() != successor_state->get_id()) {
-        cout << "       ERROR: wrong state, got " << ancestor_state.get_id() << " instead of " << successor_state->get_id() << endl;
-    }
 
     /*int predecessor_h = compute_heuristic(*predecessor_state);
     int compressed_h = pdb->get_value(state.get_unpacked_values());
